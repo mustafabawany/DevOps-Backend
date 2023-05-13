@@ -18,8 +18,11 @@ steps:
 - script: |
     npm install
     npm run build
-    npm run test
   displayName: 'npm install and build'
+
+-script: |
+    npm run test
+  displayName: 'Running Unit Tests'
 
 - task: ArchiveFiles@2
   displayName: 'Create zip artifact'
