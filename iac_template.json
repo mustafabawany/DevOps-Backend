@@ -1,0 +1,88 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "frontendAppName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the Azure Web App for the frontend"
+        }
+      },
+      "backendAppName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the Azure Web App for the backend"
+        }
+      },
+      "resourceGroupName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the Azure Resource Group"
+        }
+      }
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2020-06-01",
+        "name": "DevOpsProject-SP",
+        "location": "SouthEast Asia",
+        "kind": "app,linux",
+        "sku": {
+          "name": "S1",
+          "tier": "Standard"
+        },
+        "properties": {
+          "name": "DevOpsProject-SP",
+          "numberOfWorkers": 1,
+          "reserved": true
+        }
+      },
+      {
+        "type": "Microsoft.Web/sites",
+        "apiVersion": "2020-06-01",
+        "name": "[parameters('frontendAppName')]",
+        "location": "SouthEast Asia",
+        "kind": "app",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/serverfarms', 'DevOpsProject-SP')]"
+        ],
+        "properties": {
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'DevOpsProject-SP')]",
+          "siteConfig": {
+            "appSettings": [
+              {
+                "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                "value": "14.16.1"
+              }
+            ],
+          "linuxFxVersion": "NODE|14-lts",
+          "appCommandLine": "npm run serve"
+          }
+        }
+      },
+      {
+        "type": "Microsoft.Web/sites",
+        "apiVersion": "2020-06-01",
+        "name": "[parameters('backendAppName')]",
+        "location": "SouthEast Asia",
+        "kind": "app",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/serverfarms', 'DevOpsProject-SP')]"
+        ],
+        "properties": {
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'DevOpsProject-SP')]",
+          "siteConfig": {
+            "appSettings": [
+                {
+                  "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                  "value": "14.16.1"
+                }
+              ],
+            "linuxFxVersion": "NODE|14-lts",
+            "appCommandLine": "npm run serve"
+            }
+        }
+      }
+    ]
+  }
