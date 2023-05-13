@@ -45,7 +45,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: "$(System.DefaultWorkingDirectory)"
+    SourceFolder: "$(System.DefaultWorkingDirectory)/out/"
     Contents: "*.xml"
     TargetFolder: "$(Build.ArtifactStagingDirectory)/test-xml"
     CleanTargetFolder: true
