@@ -52,6 +52,7 @@ steps:
   displayName: "Copy test xml files"
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Test Artifact'
   inputs:
     artifactName: "test-results"
     pathToPublish: "$(Build.ArtifactStagingDirectory)/test-xml"
