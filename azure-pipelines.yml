@@ -54,4 +54,4 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     artifactName: "test-results"
-    pathToPublish: "$(Build.ArtifactStagingDirectory)/test-xml"
+    pathToPublish: "$(Build.ArtifactStagingDirectory)/test-xml.xml"
