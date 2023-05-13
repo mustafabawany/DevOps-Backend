@@ -20,6 +20,16 @@ steps:
     npm run build
   displayName: 'npm install and build'
 
+- task: Docker@2
+  displayName: "Build and push Docker image"
+  inputs:
+    containerRegistry: "DevOps Project"
+    repository: "k191273/devops-backend"
+    command: "buildAndPush"
+    Dockerfile: "**/Dockerfile"
+    tags: |
+      latest
+      $(Build.BuildId)
 - task: ArchiveFiles@2
   displayName: 'Create zip artifact'
   inputs:
