@@ -20,10 +20,6 @@ steps:
     npm run build
   displayName: 'npm install and build'
 
--script: |
-    npm run test
-  displayName: 'Running Unit Tests'
-
 - task: ArchiveFiles@2
   displayName: 'Create zip artifact'
   inputs:
@@ -37,3 +33,25 @@ steps:
   inputs:
     artifactName: 'build'
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
+
+- script: | 
+    npm run test
+  displayName: 'Running Unit Tests'
+  
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: "JUnit"
+    testResultsFiles: "**/*.xml" 
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: "$(System.DefaultWorkingDirectory)"
+    Contents: "*.xml"
+    TargetFolder: "$(Build.ArtifactStagingDirectory)/test-xml"
+    CleanTargetFolder: true
+  displayName: "Copy test xml files"
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    artifactName: "test-results"
+    pathToPublish: "$(Build.ArtifactStagingDirectory)/test-xml"
